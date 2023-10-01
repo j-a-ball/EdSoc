@@ -1,2 +1,3 @@
 # EdSoc
-The Collective Mind and the MachineCode and descriptive analysis for a meta-review of Sociology of Education, title "Th
+The Collective Mind and the Machine
+Repo contains code for descriptive analysis of academic publications
