@@ -1,0 +1,40 @@
+{
+  "input" : """{
+        "id": "EJ1104970",
+        "title": "Fifty Years since the Coleman Report: Rethinking the Relationship between Schools and Inequality",
+        "author": [
+          "Downey, Douglas B.",
+          "Condron, Dennis J."
+        ],
+        "description": "In the half century since the 1966 Coleman Report, scholars have yet to develop a consensus regarding the relationship between schools and inequality. The Coleman Report suggested that schools play little role in generating achievement gaps, but social scientists have identified many ways in which schools provide better learning environments to advantaged children compared to disadvantaged children. As a result, a critical perspective that views schools as engines of inequality dominates contemporary sociology of education. However, an important body of empirical research challenges this critical view. To reconcile the field's main ideas with this new evidence, we propose a &quot;refraction&quot; framework, a perspective on schools and inequality guided by the assumption that schools may shape inequalities along different dimensions in different ways. From this more balanced perspective, schools might indeed reproduce or exacerbate some inequalities, but they also might compensate for others--socioeconomic disparities in cognitive skills in particular. We conclude by discussing how the mostly critical perspective on schools and inequality is costly to the field of sociology of education. [For &quot;Fifty Years since the Coleman Report: Rethinking the Relationship between Schools and Inequality,&quot; see EJ1104970.]",
+        "subject": [
+          "Equal Education",
+          "Social Bias",
+          "School Role",
+          "Achievement Gap",
+          "Socioeconomic Influences",
+          "Educational Sociology",
+          "Disadvantaged Youth",
+          "Minority Group Students",
+          "School Schedules",
+          "Educational History",
+          "Curriculum",
+          "Educational Research",
+          "Educational Policy"
+        ],
+        "publicationtype": [
+          "Journal Articles",
+          "Reports - Evaluative"
+        ],
+        "publicationdateyear": 2016,
+        "language": [
+          "English"
+        ],
+        "issn": [
+          "ISSN-0038-0407"
+        ],
+        "publisher": "SAGE Publications. 2455 Teller Road, Thousand Oaks, CA 91320. Tel: 800-818-7243; Tel: 805-499-9774; Fax: 800-583-2665; e-mail: journals@sagepub.com; Web site: http://sagepub.com",
+        "peerreviewed": "T"
+      }""",
+"output" : """{"quantitative": False, "qualitative": True, "primary/secondary": True, "tertiary": False, "inequality": True, "nonstructural": False, "culture": False, "school": True, "state": False, "labor": False, "comparative": False, "methods": True}"""
+}
