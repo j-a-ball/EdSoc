@@ -29,12 +29,15 @@ def main(args):
         prompt = "\n".join(
             [jinjaLoader.example, jinjaLoader.render( templateVars )])
         # Get GPT-4 completion and overwrite output
-        completion = subprocess.run(["../codellama/llama.cpp/main", "-m", "../codellama/llama.cpp/models/7B/code-base-Q5_K.bin", "-c", "8000", "-n", "80", "--multiline_input", "-p", prompt], capture_output=True)
+        completion = subprocess.run(["../codellama/llama.cpp/main", "-m", "../codellama/llama.cpp/models/7B/code-base-Q5_K.bin", "-c", "8000", "-n", "80", "-t", "0", "--multiline_input", "-p", prompt], capture_output=True)
         completion = completion.stdout.decode("utf-8")
-        templateVars["output"] = completion[len(prompt):]
+        # Get only the completion following the prompt
+        completion = completion.replace(prompt, "")
         # Save json
+        templateVars["output"] = completion
         with open(os.path.join(args.completion_dir, file[:-4]+".json"), "w") as outfile:
             json.dump(templateVars, outfile)
+        # Save txt
         completions.append(completion)
     with open(os.path.join(args.completion_dir, "responses.txt"), "w") as outfile:
         outfile.write("<sep>".join(completions))
