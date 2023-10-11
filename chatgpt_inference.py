@@ -5,23 +5,13 @@ from tqdm import tqdm
 import argparse
 import os
 
-class jinjitsu():
-    def __init__(self, template_dir, template_file, exampleVars):
-        self.templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
-        self.templateEnv = jinja2.Environment( loader=self.templateLoader )
-        self.template = self.templateEnv.get_template( template_file )
-        self.example = self.template.render( exampleVars )
-
-    def render(self, templateVars):
-        return self.template.render( templateVars )
-
 def main(args):
     # inputs are .txt, outputs are .json {"input":str, "output":str}
     # load an initial one-shot example
     with open(args.example_json, "r") as infile:
         exampleVars = json.load(infile)
     # jinja templates
-    jinjitsu = jinjitsu(args.template_dir, args.template_file, exampleVars)
+    jinjaLoader = jinjitsu(args.template_dir, args.template_jinja, exampleVars)
     # load filepaths to loop over
     for dirpath, dirnames, filenames in os.walk(args.txt_dir):
         files = [file for file in filenames if file.endswith(".txt")]
@@ -37,7 +27,7 @@ def main(args):
             """.join(pgs[:3]),
             "output": ""}
         prompt = "\n".join(
-            [jinjitsu.example, jinjitsu.render( templateVars )])
+            [jinjaLoader.example, jinjaLoader.render( templateVars )])
         # Get GPT-4 completion and overwrite output
         chat = start_chat("Research assistant tasked with qualitatively coding articles published in Sociology of Education")
         chat = user_turn(chat, prompt)
@@ -49,6 +39,16 @@ def main(args):
         completions.append(chat[-1]["content"])
     with open(os.path.join(args.completion_dir, "responses.txt"), "w") as outfile:
         outfile.write("<sep>".join(completions))
+
+class jinjitsu():
+    def __init__(self, template_dir, template_jinja, exampleVars):
+        self.templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
+        self.templateEnv = jinja2.Environment( loader=self.templateLoader )
+        self.template = self.templateEnv.get_template( template_jinja )
+        self.example = self.template.render( exampleVars )
+
+    def render(self, templateVars):
+        return self.template.render( templateVars )
 
 if __name__ == "__main__":
     # args
