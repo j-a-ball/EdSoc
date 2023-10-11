@@ -1,9 +1,9 @@
 __author__ = "Jon Ball"
-__version__ = "July 2023"
+__version__ = "October 2023"
 
 import openai
 import tiktoken
-import time
+#import time
 import os
 from dotenv import load_dotenv
 _ = load_dotenv("openai.env")
@@ -11,15 +11,15 @@ openai_key = os.environ.get("OPENAI_KEY")
 openai.api_key = openai_key
 
 def get_completion(messages, temp=0, model="gpt-4"):
-    tok = time.time()
-    print(f"{model} generating completion...")
+    #tok = time.time()
+    #print(f"{model} generating completion...")
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
         temperature=temp, # this is the degree of randomness of the model's output
     )
-    tik = time.time()
-    print(f"   ...completion generated in {round(tik-tok, 3)} seconds.")
+    #tik = time.time()
+    #print(f"   ...completion generated in {round(tik-tok, 2)} seconds.")
     return response.choices[0].message["content"]
 
 encoding = tiktoken.encoding_for_model("gpt-4")
@@ -38,13 +38,13 @@ def start_chat(system_role):
 def user_turn(messages, user_message):
     messages.append(
         {"role": "user", "content": user_message})
-    len_messages(messages)
+    #len_messages(messages)
     return messages
 
 def system_turn(messages, temp=0, model="gpt-4"):
     system_message = get_completion(messages, temp=temp, model=model)
     messages.append(
         {"role": "system", "content": system_message})
-    print(f"System Response:\n\n {system_message}")
-    len_messages(messages)
+    #print(f"System Response:\n\n {system_message}")
+    #len_messages(messages)
     return messages
