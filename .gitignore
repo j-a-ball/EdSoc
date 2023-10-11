@@ -1,7 +1,6 @@
 *.txt
 *.log
-openai.env
-serpapi.env
+*.env
 data/pdfs
 .DS_Store
 data/.DS_Store
