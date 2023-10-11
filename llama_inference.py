@@ -59,4 +59,4 @@ if __name__ == "__main__":
     parser.add_argument("--example_json", type=str, default="prompts/examples/txt_example.json")
     args = parser.parse_args()
     # run
-    main()
+    main(args)
