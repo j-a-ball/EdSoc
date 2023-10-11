@@ -1,7 +1,7 @@
-from tqdm import tqdm
+from gpt4_utils import (start_chat, user_turn, system_turn)
 import jinja2
 import json
-import subprocess
+from tqdm import tqdm
 import argparse
 import os
 
@@ -39,13 +39,14 @@ def main(args):
         prompt = "\n".join(
             [jinjitsu.example, jinjitsu.render( templateVars )])
         # Get GPT-4 completion and overwrite output
-        completion = subprocess.run(["../codellama/llama.cpp/main", "-m", "../codellama/llama.cpp/models/7B/code-base-Q5_K.bin", "-c", "8000", "-n", "80", "--multiline_input", "-p", prompt], capture_output=True)
-        completion = completion.stdout.decode("utf-8")
-        templateVars["output"] = completion[len(prompt):]
+        chat = start_chat("Research assistant tasked with qualitatively coding articles published in Sociology of Education")
+        chat = user_turn(chat, prompt)
+        chat = system_turn(chat)
+        templateVars["output"] = chat[-1]["content"]
         # Save json
         with open(os.path.join(args.completion_dir, file[:-4]+".json"), "w") as outfile:
             json.dump(templateVars, outfile)
-        completions.append(completion)
+        completions.append(chat[-1]["content"])
     with open(os.path.join(args.completion_dir, "responses.txt"), "w") as outfile:
         outfile.write("<sep>".join(completions))
 
