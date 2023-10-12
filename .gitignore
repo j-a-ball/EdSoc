@@ -4,4 +4,5 @@
 data/pdfs
 .DS_Store
 data/.DS_Store
+completions/SE/7B_Q5/*.json
 notebooks/.ipynb_checkpoints/
