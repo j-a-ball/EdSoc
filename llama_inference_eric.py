@@ -20,7 +20,7 @@ def main(args):
     # AJE - 2170, AERJ - 2200, ASR - 2097, AJS - 1673, BJSE - 2644, ISSE - 2135
     # 74 is the length of a correct json output in tokens
     N_PREDICT = "80" # 80-token outputs allow for e.g. small spacing errors before cutoff
-    CTX_LEN = "2176" # approx max([len(tokenizer.tokenize(p) for p in prompts])]) + N_PREDICT
+    CTX_LEN = "2216" # approx max([len(tokenizer.tokenize(p) for p in prompts])]) + N_PREDICT
     # randomness setting
     TEMP = "0.0"
     # seperator for few-shot learning
