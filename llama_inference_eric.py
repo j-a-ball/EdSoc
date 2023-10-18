@@ -11,7 +11,7 @@ def main(args):
     with open(args.example_vars, "r") as infile:
         exampleVars = json.load(infile)
     # jinja template loader
-    jinjaLoader = jinjitsu(args.template_dir, args.template_file, exampleVars)
+    jinjitsu = jinjaLoader(args.template_dir, args.template_file, exampleVars)
     # load filepaths to loop over
     with open(args.input_file, "r") as infile:
         resp = json.load(infile)
@@ -29,7 +29,7 @@ def main(args):
     for rec in tqdm(records):
         # Render template with json record as input and output blank
         templateVars = {"input": str(rec), "output": ""}
-        PROMPT = SEP.join([jinjaLoader.example, jinjaLoader.render(templateVars)])
+        PROMPT = SEP.join([jinjitsu.example, jinjitsu.render(templateVars)])
         # Get GPT-4 completion and overwrite output
         completion = subprocess.run(
             ["../codellama/llama.cpp/main", 
@@ -48,7 +48,7 @@ def main(args):
             json.dump(templateVars, outfile)
     
 
-class jinjitsu():
+class jinjaLoader():
     # jinja2 template renderer
     def __init__(self, template_dir, template_file, exampleVars):
         self.templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
