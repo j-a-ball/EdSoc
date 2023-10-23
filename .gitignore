@@ -1,9 +1,10 @@
-__pycache__
 *.txt
 *.log
 *.env
-data/pdfs
+chroma/
+completions/SE/7B_Q5/*.json
 .DS_Store
 data/.DS_Store
-completions/SE/7B_Q5/*.json
+data/pdfs
 notebooks/.ipynb_checkpoints/
+__pycache__
