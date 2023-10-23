@@ -1,4 +1,4 @@
-# Task: Label a JSON metadata record of a journal article published in Sociology of Education (input) using 12 categorical labels (schema). Return the results as a correctly formatted JSON object (output), and nothing else.
+# Task: Label a JSON metadata record for a journal article published in Sociology of Education (input) using 12 categorical labels (schema). Return the results as a correctly formatted JSON dict (output), and nothing else.
 ## Input schema: ```API Attribute Name	ERIC Field Name	Download Field Name	Description
 author	Author	<dc:creator>	Author(s), editor(s), or compiler(s) of the resource. Author names are listed in the order in which they appear on the article or document, and are shown in the format "Lastname, Firstname."
 description	Abstract	<dc:description>	Brief narrative description of the resource. Every ERIC record has a description, or abstract.
@@ -12,19 +12,15 @@ publicationtype	Publication Type	<dc:type>	Reflects the format of the material a
 publisher	Publisher Information	<dc:publisher>	Name of the publisher with contact information, including address, telephone, email, and web address.
 subject	Descriptors	<dc:subject>	Terms from the ERIC Thesaurus added to records to help identify materials on topics in the field of education. Subject terms, or descriptors, are assigned to every record in ERIC and reflect the subjects specified in the content.
 title	Title	<dc:title>	Title of the resource. Includes subtitle, series name, and report number when applicable.```
-## Categorical schema: Each input contains information indicating whether an article is either (1) "quantitative" or (2) "qualitative" in terms of methods; whether its focus is specifically (3) "primary/secondary" education, (4) "tertiary" education, or neither; and finally, which one of the following eight topical labels best describes the article's primary focus: (5) "inequality", (6) "nonstructural", (7) "culture", (8) "school", (9) "state", (10) "labor", (11) "comparative", (12) "methods".
+## Categorical schema: Each input contains information indicating whether an article is either (1) "quantitative" or (2) "qualitative" in terms of methods; whether its focus is specifically (3) "primary/secondary" education, (4) "tertiary" education, or neither; and finally, which one of the following eight topical labels best describes the article's primary focus: (5) "inequality", which includes racial inequality; (6) "nonstructural", indicating factors like student behavior that are not determined by structural inequality (i.e., social class, race/ethnicity, immigration status, and gender); (7) "culture", which refers to cultural influences on the organization of schooling, and vice versa; (8) "school", which indicates a focus on the organization of schooling; (9) "state", which refers to the relationship between education and government; (10) "labor", which indicates labor market outcomes and transitions; (11) "comparative", which indicates a historical or international case for comparison; (12) "methods", which indicates a focus on developing quantitative or qualitative methodologies.
 ## Output schema: {"quantitative": bool, "qualitative": bool, "primary/secondary": bool, "tertiary": bool, "inequality": bool, "nonstructural": bool, "culture": bool, "school": bool, "state": bool, "labor": bool, "comparative": bool, "methods": bool}
-# Few-shot: JSON inputs and outputs are provided for Example 1 and Example 2. Complete Example 3.
+# Few-shot: JSON inputs and outputs are provided for Example 1 and Example 2. Think step-by-step about how to label the input, then check the provided output. For Example 3, only the input is provided. Complete Example 3.
 ## Example 1.
 input = {{ input1 }}
 output = {{ output1 }}
 ## Example 2.
-# Input
-json_input = {{ input2 }}
-# Output
-json_output = {{ output2 }}
+input = {{ input2 }}
+output = {{ output2 }}
 ## Example 3.
-# Input
-json_input = {{ input3 }}
-# Output
-json_output = {{ output3 }}
+input = {{ input3 }}
+output = {{ output3 }}
