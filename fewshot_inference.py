@@ -1,8 +1,7 @@
 __author__ = "Jon Ball"
 __version__ = "October 2023"
 
-
-from langchain.embeddings import HuggingFaceBgeEmbeddings
+from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain.vectorstores import Chroma
 import chromadb
 import jinja2
@@ -16,27 +15,27 @@ import os
 def main(args):
 
     #
-    model_name = "BAAI/bge-large-en"
+    model_name = "Muennighoff/SGPT-125M-weightedmean-nli-bitfit"
     model_kwargs = {"device": "cpu"}
     encode_kwargs = {"normalize_embeddings": True}
-    embedding_function = HuggingFaceBgeEmbeddings(
+    embedding = SentenceTransformerEmbeddings(
         model_name=model_name,
         model_kwargs=model_kwargs,
         encode_kwargs=encode_kwargs
         )
-    #
+    # Set up local chroma client
     persistent_client = chromadb.PersistentClient(path="chroma")
-    #
+    # Vector db of 10 hand-labeled examples
     manualDB = Chroma(
         client=persistent_client,
         collection_name="manual",
-        embedding_function=embedding_function,
+        embedding_function=embedding,
         )
-    #
+    # Vector db of 90 examples labeled by GPT-4
     gpt4DB = Chroma(
         client=persistent_client,
         collection_name="gpt4",
-        embedding_function=embedding_function,
+        embedding_function=embedding
         )
     #
     jinjitsu = jinjaLoader(args.template_dir, args.template_file)
@@ -45,13 +44,8 @@ def main(args):
     with open(args.input_file, "r") as infile:
         resp = json.load(infile)
     records = resp["response"]["docs"]
-    #
-    N_PREDICT = "80" # 80-token outputs allow for e.g. small spacing errors before cutoff
-    CTX_LEN = "2987" # max([len(tokenizer.tokenize(p) for p in prompts])]) + N_PREDICT
-    # randomness setting
-    TEMP = "0.0"
     # loop over records
-    for rec in tqdm(records[648:]):
+    for rec in tqdm(records):
         input3 = str(rec)
         # Pull most similar manually labeled doc
         sim1 = manualDB.similarity_search(input3, 1)[0]
@@ -67,10 +61,10 @@ def main(args):
         # Get CodeLLaMA compeletion
         completion = subprocess.run(
             ["../codellama/llama.cpp/main", 
-             "-m", "../codellama/llama.cpp/models/7B/code-base-Q5_K.bin", 
-             "-c", CTX_LEN,
-             "-n", N_PREDICT,
-             "-t", TEMP,
+             "-m", args.model_path, 
+             "-c", args.ctx_len,
+             "-n", args.n_predict,
+             "-t", args.temp,
              "--multiline_input", 
              "-p", PROMPT], capture_output=True)
         try:
@@ -99,10 +93,14 @@ class jinjaLoader():
 if __name__ == "__main__":
     # args
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_path", type=str, default="../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin")
     parser.add_argument("--input_file", type=str, default="data/eric/se.json")
-    parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/3shot")
+    parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/fewshot")
     parser.add_argument("--template_dir", type=str, default="prompts")
-    parser.add_argument("--template_file", type=str, default="3shot.jinja")
+    parser.add_argument("--template_file", type=str, default="fewshot.prompt")
+    parser.add_argument("--n_predict", type=str, default="75")
+    parser.add_argument("--ctx_len", type=str, default="2804")
+    parser.add_argument("--temp", type=str, default="0.0")
     args = parser.parse_args()
     # run
     main(args)

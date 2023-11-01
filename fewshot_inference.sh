@@ -1,7 +1,7 @@
 #!bin/bash
 
 # Sociology of Education
-#python fewshot_inference.py \
+#python 7b_fewshot_inference.py \
 #--model_path ../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin \
 #--input_file data/eric/se.json \
 #--completion_dir completions/SE/7B_Q5/fewshot \
@@ -12,7 +12,7 @@
 #--temp 0.0
 
 # American Journal of Education
-#python fewshot_inference.py \
+#python 7b_fewshot_inference.py \
 #--model_path ../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin \
 #--input_file data/eric/aje.json \
 #--completion_dir completions/AJE/7B_Q5/fewshot \
@@ -23,7 +23,7 @@
 #--temp 0.0
 
 # American Educational Research Journal
-#python fewshot_inference.py \
+#python 7b_fewshot_inference.py \
 #--model_path ../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin \
 #--input_file data/eric/aerj.json \
 #--completion_dir completions/AERJ/7B_Q5/fewshot \
