@@ -1,8 +1,6 @@
 *.txt
 *.log
 *.env
-chroma/
-completions/SE/7B_Q5/*.json
 .DS_Store
 data/.DS_Store
 data/pdfs
