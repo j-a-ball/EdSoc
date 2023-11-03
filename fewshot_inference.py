@@ -13,8 +13,7 @@ import os
 
 
 def main(args):
-
-    #
+    # Document embedding model
     model_name = "Muennighoff/SGPT-125M-weightedmean-nli-bitfit"
     model_kwargs = {"device": "cpu"}
     encode_kwargs = {"normalize_embeddings": True}
@@ -23,7 +22,7 @@ def main(args):
         model_kwargs=model_kwargs,
         encode_kwargs=encode_kwargs
         )
-    # Set up local chroma client
+    # Access local chroma client
     persistent_client = chromadb.PersistentClient(path="chroma")
     # Vector db of 10 hand-labeled examples
     manualDB = Chroma(
@@ -44,18 +43,21 @@ def main(args):
     with open(args.input_file, "r") as infile:
         resp = json.load(infile)
     records = resp["response"]["docs"]
+    # create the output dir if it doesn't exist
+    if not os.path.exists(args.completion_dir):
+        os.mkdir(args.completion_dir)
     # loop over records
     for rec in tqdm(records):
-        input3 = str(rec)
+        input = str(rec)
         # Pull most similar manually labeled doc
-        sim1 = manualDB.similarity_search(input3, 1)[0]
-        # Pull most similar gpt4 labeled doc
-        sim2 = gpt4DB.similarity_search(input3, 1)[0]
-        # Load the vars
+        examples = [ex.metadata for ex in manualDB.similarity_search(input, 1)]
+        if args.n_examples > 1:
+            # Pull most similar GPT-4 labeled docs
+            examples += [ex.metadata for ex in gpt4DB.similarity_search(input, args.n_examples-1)]
         templateVars = {
-            "input1": sim1.metadata["input"], "output1": sim1.metadata["output"], 
-            "input2": sim2.metadata["input"], "output2": sim2.metadata["output"], 
-            "input3": input3, "output3": ""
+            "examples": examples,
+            "input": input, 
+            "output": ""
             }
         PROMPT = jinjitsu.render(templateVars)
         # Get CodeLLaMA compeletion
@@ -74,7 +76,7 @@ def main(args):
         # Get only the completion following the prompt
         completion = completion.replace(PROMPT, "")
         # Save json
-        templateVars["output3"] = completion
+        templateVars["output"] = completion
         with open(os.path.join(args.completion_dir, rec["id"] + ".json"), "w") as outfile:
             json.dump(templateVars, outfile)
     
@@ -98,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/fewshot")
     parser.add_argument("--template_dir", type=str, default="prompts")
     parser.add_argument("--template_file", type=str, default="fewshot.prompt")
+    parser.add_argument("--n_examples", type=int, default=3)
     parser.add_argument("--n_predict", type=str, default="75")
     parser.add_argument("--ctx_len", type=str, default="2804")
     parser.add_argument("--temp", type=str, default="0.0")
