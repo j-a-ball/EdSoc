@@ -5,14 +5,19 @@ from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain.vectorstores import Chroma
 import chromadb
 import jinja2
+import torch
 from tqdm import tqdm
 import subprocess
 import argparse
+import random
 import json
 import os
 
 
 def main(args):
+    # Set random seed 
+    random.seed(42)
+    torch.manual_seed(42)
     # Document embedding model
     model_name = "Muennighoff/SGPT-125M-weightedmean-nli-bitfit"
     model_kwargs = {"device": "cpu"}
