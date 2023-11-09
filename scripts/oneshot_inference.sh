@@ -83,3 +83,15 @@ python fewshot_inference.py \
 --n_predict 75 \
 --ctx_len 1947 \
 --temp 0.0
+
+# random baseline
+python fewshot_inference.py \
+--model_path ../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin \
+--input_file data/eric/random.json \
+--completion_dir completions/random/7B_Q5/oneshot \
+--template_dir prompts \
+--template_file fewshot.prompt \
+--n_examples 1 \
+--n_predict 75 \
+--ctx_len 2006 \
+--temp 0.0
