@@ -18,7 +18,7 @@ def main(args):
     # Set random seed 
     random.seed(42)
     torch.manual_seed(42)
-    # Document embedding model
+    # Load document embedding model
     model_name = "Muennighoff/SGPT-125M-weightedmean-nli-bitfit"
     model_kwargs = {"device": "cpu"}
     encode_kwargs = {"normalize_embeddings": True}
@@ -41,9 +41,8 @@ def main(args):
         collection_name="gpt4",
         embedding_function=embedding
         )
-    #
+    # load jinja template
     jinjitsu = jinjaLoader(args.template_dir, args.template_file)
-    #
     # load records
     with open(args.input_file, "r") as infile:
         resp = json.load(infile)
@@ -59,13 +58,14 @@ def main(args):
         if args.n_examples > 1:
             # Pull most similar GPT-4 labeled docs
             examples += [ex.metadata for ex in gpt4DB.similarity_search(input, args.n_examples-1)]
+        # Render prompt
         templateVars = {
             "examples": examples,
             "input": input, 
             "output": ""
             }
         PROMPT = jinjitsu.render(templateVars)
-        # Get CodeLLaMA compeletion
+        # Get Code Llama completion
         completion = subprocess.run(
             ["../codellama/llama.cpp/main", 
              "-m", args.model_path, 
@@ -90,11 +90,11 @@ class jinjaLoader():
     # jinja2 template renderer
     def __init__(self, template_dir, template_file):
         self.templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
-        self.templateEnv = jinja2.Environment( loader=self.templateLoader )
-        self.template = self.templateEnv.get_template( template_file )
+        self.templateEnv = jinja2.Environment(loader=self.templateLoader)
+        self.template = self.templateEnv.get_template(template_file)
 
     def render(self, templateVars):
-        return self.template.render( templateVars )
+        return self.template.render(templateVars)
 
 
 if __name__ == "__main__":
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/fewshot")
     parser.add_argument("--template_dir", type=str, default="prompts")
     parser.add_argument("--template_file", type=str, default="fewshot.prompt")
-    parser.add_argument("--n_examples", type=int, default=3)
+    parser.add_argument("--n_examples", type=int, default=5)
     parser.add_argument("--n_predict", type=str, default="75")
     parser.add_argument("--ctx_len", type=str, default="2804")
     parser.add_argument("--temp", type=str, default="0.0")
