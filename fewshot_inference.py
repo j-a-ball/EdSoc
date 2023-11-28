@@ -49,7 +49,7 @@ def main(args):
     records = resp["response"]["docs"]
     # create the output dir if it doesn't exist
     if not os.path.exists(args.completion_dir):
-        os.mkdir(args.completion_dir)
+        os.makedirs(args.completion_dir)
     # loop over records
     for rec in tqdm(records):
         input = str(rec)
