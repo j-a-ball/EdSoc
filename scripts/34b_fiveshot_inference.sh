@@ -4,7 +4,7 @@
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/se.json \
---completion_dir completions/SE/7B_Q5/fiveshot \
+--completion_dir completions/SE/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -16,7 +16,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/aje.json \
---completion_dir completions/AJE/7B_Q5/fiveshot \
+--completion_dir completions/AJE/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -28,7 +28,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/aerj.json \
---completion_dir completions/AERJ/7B_Q5/fiveshot \
+--completion_dir completions/AERJ/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -40,7 +40,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/asr.json \
---completion_dir completions/ASR/7B_Q5/fiveshot \
+--completion_dir completions/ASR/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -52,7 +52,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/ajs.json \
---completion_dir completions/AJS/7B_Q5/fiveshot \
+--completion_dir completions/AJS/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -64,7 +64,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/bjse.json \
---completion_dir completions/BJSE/7B_Q5/fiveshot \
+--completion_dir completions/BJSE/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -76,7 +76,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/isse.json \
---completion_dir completions/ISSE/7B_Q5/fiveshot \
+--completion_dir completions/ISSE/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
@@ -88,7 +88,7 @@ python fewshot_inference.py \
 python fewshot_inference.py \
 --model_path ../codellama/llama.cpp/models/34B/codellama-34b-instruct.Q5_K_S.gguf \
 --input_file data/eric/random.json \
---completion_dir completions/random/7B_Q5/fiveshot \
+--completion_dir completions/random/34B_Q5/fiveshot \
 --template_dir prompts \
 --template_file fewshot.prompt \
 --n_examples 5 \
