@@ -71,8 +71,8 @@ def main(args):
              "-m", args.model_path, 
              "-c", args.ctx_len,
              "-n", args.n_predict,
-             "-t", args.threads,
              "--temp", args.temp,
+             "--threads", args.threads,
              "--multiline_input", 
              "-p", PROMPT], capture_output=True)
         try:
@@ -106,11 +106,11 @@ if __name__ == "__main__":
     parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/fewshot")
     parser.add_argument("--template_dir", type=str, default="prompts")
     parser.add_argument("--template_file", type=str, default="fewshot.prompt")
-    parser.add_argument("--n_examples", type=int, default=5)
+    parser.add_argument("--n_examples", type=int, default="5")
     parser.add_argument("--n_predict", type=str, default="75")
     parser.add_argument("--ctx_len", type=str, default="2804")
     parser.add_argument("--temp", type=str, default="0.0")
-    parser.add_argument("--threads", type=int, default=8)
+    parser.add_argument("--threads", type=int, default="8")
     args = parser.parse_args()
     # run
     main(args)
