@@ -71,7 +71,8 @@ def main(args):
              "-m", args.model_path, 
              "-c", args.ctx_len,
              "-n", args.n_predict,
-             "-t", args.temp,
+             "-t", args.threads,
+             "--temp", args.temp,
              "--multiline_input", 
              "-p", PROMPT], capture_output=True)
         try:
@@ -109,6 +110,7 @@ if __name__ == "__main__":
     parser.add_argument("--n_predict", type=str, default="75")
     parser.add_argument("--ctx_len", type=str, default="2804")
     parser.add_argument("--temp", type=str, default="0.0")
+    parser.add_argument("--threads", type=int, default=8)
     args = parser.parse_args()
     # run
     main(args)
