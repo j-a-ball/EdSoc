@@ -16,6 +16,8 @@ def get_completion(messages, temp=0, model="gpt-4"):
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
+        max_tokens=75,
+        seed=42,
         temperature=temp, # this is the degree of randomness of the model's output
     )
     #tik = time.time()
