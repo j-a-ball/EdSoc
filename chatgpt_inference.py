@@ -1,18 +1,23 @@
 __author__ = "Jon Ball"
-__version__ = "October 2023"
+__version__ = "November 2023"
 
 from notebooks.gpt_utils import (start_chat, user_turn, system_turn)
 from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain.vectorstores import Chroma
+from tqdm import tqdm
 import chromadb
 import jinja2
-from tqdm import tqdm
+import torch
 import argparse
+import random
 import json
 import os
 
 
 def main(args):
+    # Set random seed
+    random.seed(42)
+    torch.manual_seed(42)
     # Document embedding model
     model_name = "Muennighoff/SGPT-125M-weightedmean-nli-bitfit"
     model_kwargs = {"device": "cpu"}
@@ -45,7 +50,7 @@ def main(args):
     records = resp["response"]["docs"]
     # create the output dir if it doesn't exist
     if not os.path.exists(args.completion_dir):
-        os.mkdir(args.completion_dir)
+        os.makedirs(args.completion_dir)
     # loop over records
     for rec in tqdm(records):
         input = str(rec)
@@ -61,13 +66,11 @@ def main(args):
             }
         PROMPT = jinjitsu.render(templateVars)
         # Get CodeLLaMA compeletion
-        chat = start_chat("Research assistant tasked with labeling articles published in Sociology of Education")
+        chat = start_chat("You are a sociological research assistant tasked with labeling records of articles published in Sociology of Education. You return only correct labels in the specified format.")
         chat = user_turn(chat, PROMPT)
-        chat = system_turn(chat)
-        # Get only the completion following the prompt
-        completion = completion.replace(PROMPT, "")
+        chat = system_turn(chat, model=args.model_name)
         # Save json
-        templateVars["output"] = completion
+        templateVars["output"] = chat[-1]["content"]
         with open(os.path.join(args.completion_dir, rec["id"] + ".json"), "w") as outfile:
             json.dump(templateVars, outfile)
     
@@ -84,17 +87,15 @@ class jinjaLoader():
 
 
 if __name__ == "__main__":
+
     # args
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", type=str, default="../codellama/llama.cpp/models/7B/code-instruct-Q5_K.bin")
+    parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
     parser.add_argument("--input_file", type=str, default="data/eric/se.json")
-    parser.add_argument("--completion_dir", type=str, default="completions/SE/7B_Q5/fewshot")
+    parser.add_argument("--completion_dir", type=str, default="completions/SE/chatgpt/fiveshot")
     parser.add_argument("--template_dir", type=str, default="prompts")
     parser.add_argument("--template_file", type=str, default="fewshot.prompt")
-    parser.add_argument("--n_examples", type=int, default=3)
-    parser.add_argument("--n_predict", type=str, default="75")
-    parser.add_argument("--ctx_len", type=str, default="2804")
-    parser.add_argument("--temp", type=str, default="0.0")
+    parser.add_argument("--n_examples", type=int, default=5)
     args = parser.parse_args()
     # run
     main(args)
