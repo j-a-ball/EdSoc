@@ -11,6 +11,7 @@ import torch
 import argparse
 import random
 import json
+import time
 import os
 
 
@@ -53,6 +54,7 @@ def main(args):
         os.makedirs(args.completion_dir)
     # loop over records
     for rec in tqdm(records):
+        time.sleep(random.randint(1, 3))
         input = str(rec)
         # Pull most similar manually labeled doc
         examples = [ex.metadata for ex in manualDB.similarity_search(input, 1)]
@@ -65,10 +67,15 @@ def main(args):
             "output": ""
             }
         PROMPT = jinjitsu.render(templateVars)
-        # Get CodeLLaMA compeletion
+        # Get ChatGPT compeletion
         chat = start_chat("You are a sociological research assistant tasked with labeling records of articles published in Sociology of Education. You return only correct labels in the specified format.")
         chat = user_turn(chat, PROMPT)
-        chat = system_turn(chat, model=args.model_name)
+        try:
+            chat = system_turn(chat, model=args.model_name)
+        except TimeoutError:
+            # try again
+            time.sleep(random.randint(1, 3))
+            chat = system_turn(chat, model=args.model_name)
         # Save json
         templateVars["output"] = chat[-1]["content"]
         with open(os.path.join(args.completion_dir, rec["id"] + ".json"), "w") as outfile:
