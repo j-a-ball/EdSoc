@@ -1,6 +1,7 @@
-*.txt
-*.log
 *.env
+*.log
+*.pdf
+*.txt
 .DS_Store
 data/.DS_Store
 data/pdfs

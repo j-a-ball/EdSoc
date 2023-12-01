@@ -1,4 +1,4 @@
-# The “Collective Mind” and the Machine: Grounding AI language models in the sociology of education to perform research assistance tasks
+# The “Collective Mind” and the Machine: Grounding AI language models in the sociology of education so they can perform research assistance tasks
 
 ## Abstract
 
